@@ -6,6 +6,12 @@ load_dotenv()
 
 API_KEY = os.getenv("WEATHER_API_KEY")
 
+if not API_KEY:
+    raise ValueError(
+        "WEATHER_API_KEY is not set. "
+        "Create a .env file with your WeatherAPI key."
+        )
+
 INPUT_FILE = "input.csv"
 OUTPUT_FILE = "output.csv"
 API_URL = "http://api.weatherapi.com/v1/current.json"
