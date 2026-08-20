@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+# weather-csv-api
+Python program that retrieves weather data for ZIP codes using WeatherAPI.com and exports the results to CSV.
+=======
+>>>>>>> 3c14ac53daa3c544087f61544d413d9527679279
 # Weather CSV API
 
 Python program that takes a list of ZIP codes from a CSV file, gets the current weather for each location using WeatherAPI.com, and saves the results to another CSV file.
