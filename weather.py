@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.getenv("WEATHER_API_KEY")
-
+# gets the 
 if not API_KEY:
     raise ValueError(
         "WEATHER_API_KEY is not set. "
@@ -24,11 +24,12 @@ def get_weather(zip_code):
     params = {
         "key": API_KEY,
         "q": zip_code,
-        "aqi": "no"
+        "aqi": "no" # not using air quality data, so skipping it in the response
     }
 
     try:
         response = requests.get(API_URL, params=params, timeout=10)
+        # timeout stops the script from hanging if the API doesn't respond
 
         if response.status_code == 200:
             data = response.json()
@@ -47,11 +48,13 @@ def get_weather(zip_code):
             return None
 
     except requests.RequestException as error:
+        # network related failure
         print(f"Could not connect to weather API for {zip_code}.")
         print(f"Error: {error}")
         return None
 
     except (KeyError, TypeError) as error:
+        # request succeeded, but the response didn't have the fields we expected
         print(f"Unexpected response format for {zip_code}: missing {error}")
         return None
 
@@ -64,6 +67,7 @@ def main():
         reader = csv.DictReader(file)
 
         if reader.fieldnames is None or "zip" not in reader.fieldnames:
+            # in-case the zip header column is missing
             raise ValueError(f"{INPUT_FILE} must have a 'zip' column.")
 
         for row in reader:
@@ -71,7 +75,7 @@ def main():
 
             if not zip_code:
                 print("Skipping row with missing Zip code.")
-                continue
+                continue # move to the next row instead of stopping the whole script
 
             weather = get_weather(zip_code)
 
