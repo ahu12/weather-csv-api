@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# weather-csv-api
-Python program that retrieves weather data for ZIP codes using WeatherAPI.com and exports the results to CSV.
-=======
 # Weather CSV API
 
 Python program that takes a list of ZIP codes from a CSV file, gets the current weather for each location using WeatherAPI.com, and saves the results to another CSV file.
@@ -9,11 +5,11 @@ Python program that takes a list of ZIP codes from a CSV file, gets the current 
 ## What it Does
 
 * Reads ZIP codes from `input.csv`
-* Gets current weather data from WeatherAPI.com
-* Records the city, temperature, feels-like temperature, humidity, and conditions
+* Gets the current weather data for each zip code from WeatherAPI.com
+* Gets the city, temperature, feels-like temperature, humidity, and conditions
 * Saves the results to `output.csv`
 * Uses a `.env` file to keep the API key out of the source code
-* Continues processing if an individual API request fails
+* If one Zip code fails (bad request, connection issue, etc.), it prints an error and moves on to the next zip code
 
 ## Requirements
 
@@ -119,11 +115,11 @@ The program checks for:
 * Missing API credentials
 * Failed API requests
 * Connection errors
-* Non-successful API responses
+* Unsuccessful API responses
 
 If a request fails for one ZIP code, the program reports the error and continues with the remaining ZIP codes.
 
-## Project Structure
+## Files in this repo
 
 ```text
 weather-csv-api/
@@ -156,6 +152,6 @@ Install them with:
 pip install -r requirements.txt
 ```
 
-## API
+## API Credit
 
 This project uses the [WeatherAPI.com Current Weather API](https://www.weatherapi.com/docs/).

@@ -1,5 +1,6 @@
-import csv,os,requests
-
+import csv
+import os
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,7 +15,7 @@ if not API_KEY:
 
 INPUT_FILE = "input.csv"
 OUTPUT_FILE = "output.csv"
-API_URL = "http://api.weatherapi.com/v1/current.json"
+API_URL = "https://api.weatherapi.com/v1/current.json"
 
 
 def get_weather(zip_code):
@@ -38,16 +39,20 @@ def get_weather(zip_code):
                 "temperature": data["current"]["temp_f"],
                 "feels_like": data["current"]["feelslike_f"],
                 "humidity": data["current"]["humidity"],
-                "condition": data["current"]["condition"]["text"]                
+                "condition": data["current"]["condition"]["text"]               
             }
-
-        print(f"API request failed for {zip_code}.")
-        print(f"Status code: {response.status_code}")
-        return None
+        else:
+            print(f"API request failed for {zip_code}.")
+            print(f"Status code: {response.status_code}")
+            return None
 
     except requests.RequestException as error:
         print(f"Could not connect to weather API for {zip_code}.")
         print(f"Error: {error}")
+        return None
+
+    except (KeyError, TypeError) as error:
+        print(f"Unexpected response format for {zip_code}: missing {error}")
         return None
 
 def main():
@@ -58,8 +63,16 @@ def main():
     with open(INPUT_FILE, "r", newline="") as file:
         reader = csv.DictReader(file)
 
+        if reader.fieldnames is None or "zip" not in reader.fieldnames:
+            raise ValueError(f"{INPUT_FILE} must have a 'zip' column.")
+
         for row in reader:
-            zip_code = row["zip"]
+            zip_code = row.get("zip", "").strip()
+
+            if not zip_code:
+                print("Skipping row with missing Zip code.")
+                continue
+
             weather = get_weather(zip_code)
 
             if weather:
